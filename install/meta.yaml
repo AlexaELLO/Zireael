@@ -1,0 +1,6 @@
+install\ddl\bs_admin.sql
+install\ddl\bs_role.sql
+install\ddl\bs_user.sql
+install\grants\bs_admin.sql
+install\grants\bs_role.sql
+install\grants\bs_user.sql

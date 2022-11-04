@@ -1,0 +1,1 @@
+grant bs_role to bs_user;

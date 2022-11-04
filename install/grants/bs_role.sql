@@ -1,0 +1,1 @@
+grant create session to bs_role;
