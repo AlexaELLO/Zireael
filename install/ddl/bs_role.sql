@@ -1,1 +1,0 @@
-create role bs_role;
