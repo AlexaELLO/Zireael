@@ -1,0 +1,6 @@
+install/ddl/zireael_lu.sql
+install/ddl/zireael_library.sql
+install/ddl/zireael_user.sql
+install/grants/zireael_lu.sql
+install/grants/zireael_user.sql
+install/grants/zireael_library.sql
