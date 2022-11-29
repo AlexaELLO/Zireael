@@ -1,0 +1,1 @@
+grant zireael_role to zireael;
