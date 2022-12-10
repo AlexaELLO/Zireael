@@ -10,10 +10,13 @@ create table t_books (
     constraint book_pk primary key (id)
 );
 
+alter table t_books
+    add constraint book_uq unique(name);
+
 comment on table t_books is 'Book table';
-comment on column t_books.id is 'Identifier of row';
-comment on column t_books.name is 'Name of book';
-comment on column t_books.name is 'Price of book';
+comment on column t_books.id is 'Book ID';
+comment on column t_books.name is 'Name of the book';
+comment on column t_books.name is 'Book price';
 
 create or replace trigger book_tbi
     before insert on t_books
@@ -33,6 +36,9 @@ create table t_genres (
     name varchar2(100) not null,
     constraint genre_pk primary key(id)
 );
+
+alter table t_genres
+    add constraint genre_uq unique(name);
 
 comment on table t_genres is 'Genre Directory';
 comment on column t_genres.id is 'Genre ID';
@@ -110,11 +116,11 @@ create table t_lnk_books_publishers (
 );
 
 alter table t_lnk_books_publishers
-    add constraint lnk_book_fk foreign key(book_id)
+    add constraint lnk_book_publisher_fk foreign key(book_id)
         references t_books(id);
 
 alter table t_lnk_books_publishers
-    add constraint lnk_publisher_fk foreign key(publisher_id)
+    add constraint lnk_publisher_book_fk foreign key(publisher_id)
         references t_publishers(id);
 
 comment on table t_lnk_books_publishers is 'Books and publisher link table';
@@ -156,3 +162,29 @@ alter table t_lnk_books_genres
 comment on table t_lnk_books_genres is 'Books and genre link table';
 comment on column t_lnk_books_genres.book_id is 'Book ID';
 comment on column t_lnk_books_genres.genre_id is 'Genre ID';
+
+--drop tables, seq, triggers
+select owner, object_name, object_type
+from all_objects
+where owner = 'ZIREAEL_LIBRARY'
+and object_type in ('TABLE', 'SEQUENCE', 'TRIGGER')
+order by object_type desc;
+
+--drop_objects
+begin
+    for i in (
+        select owner, object_name, object_type
+        from all_objects
+        where owner = 'ZIREAEL_LIBRARY'
+        and object_type in ('TABLE', 'SEQUENCE', 'TRIGGER')
+        order by object_type desc
+    )
+    loop
+        if i.object_type = 'TABLE' then
+            execute immediate 'drop '|| i.object_type || ' ' || i.object_name ||' cascade constraints purge';
+        else
+            execute immediate 'drop '|| i.object_type || ' ' || i.object_name;
+        end if;
+    end loop;
+end;
+/
