@@ -1,0 +1,11 @@
+install/zireael_library/ddl/book_seq.sql
+install/zireael_library/ddl/t_books.sql
+install/zireael_library/ddl/book_tbi.sql
+
+install/zireael_library/ddl/genre_seq.sql
+install/zireael_library/ddl/t_genres.sql
+install/zireael_library/ddl/genre_tbi.sql
+
+install/zireael_library/ddl/publisher_seq.sql
+install/zireael_library/ddl/t_publishers.sql
+install/zireael_library/ddl/publisher_tbi.sql
