@@ -15,3 +15,5 @@ install/zireael_library/ddl/t_authors.sql
 install/zireael_library/ddl/author_tbi.sql
 
 install/zireael_library/ddl/t_lnk_books_publishers.sql
+install/zireael_library/ddl/t_lnk_books_authors.sql
+install/zireael_library/ddl/t_lnk_books_genres.sql
