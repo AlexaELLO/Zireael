@@ -188,3 +188,46 @@ begin
     end loop;
 end;
 /
+
+begin
+    put_book_data('');
+end;
+
+select substr('Арсений Тарковский Александрович', instr('Арсений Тарковский Александрович', ' ', 1) + 1, instr('Арсений Тарковский Александрович', ' ', 1, 2) - instr('Арсений Тарковский Александрович', ' ', 1))
+from dual;
+
+select si.name
+from (
+    select 'Арсений Тарковский Александрович' name
+    from dual
+    union
+    select 'Тарковский Геннадий Александрович' name
+    from dual
+)si
+where si.name like '%Алекс%';
+
+select instr('Арсений Тарковский Александрович', ' ', 1, 2) - instr('Арсений Тарковский Александрович', ' ', 1)
+from dual;
+
+select length('Арсений Тарковский Александрович') - instr('Арсений Тарковский Александрович', ' ', 1)
+from dual;
+
+select jb.first_name,
+       jb.last_name,
+       jb.third_name,
+       jb.publisher,
+       jb.genre,
+       jb.book,
+       jb.price
+from json_table('{"new_books":[{"author":{"first_name":null,"last_name":null},"publisher":null,"genre":null,"book":null,"price":null},{"author":{"first_name":null,"last_name":null},"publisher":null,"genre":null,"book":null,"price":null},{"author":{"first_name":null,"last_name":null,"third_name":null},"publisher":null,"genre":null,"book":null,"price":null}]}',
+    '$.new_books[*]'
+    columns(
+        nested path '$.author'
+            columns(
+                first_name varchar2(100) path '$.first_name',
+                last_name varchar2(100) path '$.first_name',
+                third_name varchar2(100) path '$.third_name'),
+        publisher varchar2(100) path '$.publisher',
+        genre varchar2(100) path '$.genre',
+        book varchar2(300) path '$.book',
+        price number(10,2) path '$.price')) jb;
