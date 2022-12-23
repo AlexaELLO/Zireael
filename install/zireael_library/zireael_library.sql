@@ -212,22 +212,42 @@ from dual;
 select length('Арсений Тарковский Александрович') - instr('Арсений Тарковский Александрович', ' ', 1)
 from dual;
 
-select jb.first_name,
-       jb.last_name,
-       jb.third_name,
-       jb.publisher,
-       jb.genre,
-       jb.book,
-       jb.price
-from json_table('{"new_books":[{"author":{"first_name":null,"last_name":null},"publisher":null,"genre":null,"book":null,"price":null},{"author":{"first_name":null,"last_name":null},"publisher":null,"genre":null,"book":null,"price":null},{"author":{"first_name":null,"last_name":null,"third_name":null},"publisher":null,"genre":null,"book":null,"price":null}]}',
+select *
+from json_table('{"new_books":[{"authors":{"first_name":"Дженнифер","last_name":"Линкольн"},"publisher":["Манн","Иванов и Фербер"],"genre":["Анотомия и физиология","Акушерство и гинекология"],"book":"Спроси гинеколога. Все что вы хотели знать о месячных, сексе, предохранении и беременности","price":null}]}',
     '$.new_books[*]'
     columns(
-        nested path '$.author'
-            columns(
-                first_name varchar2(100) path '$.first_name',
-                last_name varchar2(100) path '$.first_name',
-                third_name varchar2(100) path '$.third_name'),
-        publisher varchar2(100) path '$.publisher',
-        genre varchar2(100) path '$.genre',
-        book varchar2(300) path '$.book',
-        price number(10,2) path '$.price')) jb;
+        nested path '$.authors'
+        columns(
+            first_name varchar2(100) path '$.first_name',
+            last_name varchar2(100) path '$.last_name'),
+        nested path '$.publisher[*]'
+        columns(publisher varchar2(100) path '$'))) jb;
+
+select ja.first_name,
+       ja.last_name,
+       ja.third_name,
+       a.first_name first_name_exists,
+       a.last_name last_name_exists
+from json_table('{"new_books":[{"authors":{"first_name":"Дженнифер","last_name":"Линкольн","third_name":null},"publisher":["Манн","Иванов и Фербер"],"genre":["Анотомия и физиология","Акушерство и гинекология"],"book":"Спроси гинеколога. Все что вы хотели знать о месячных, сексе, предохранении и беременности","price":null}]}',
+    '$.new_books[*].authors'
+    columns(
+            first_name varchar2(100) path '$.first_name',
+            last_name varchar2(100) path '$.last_name',
+            third_name varchar2(100) path '$.third_name')) ja
+left join t_authors a on ja.first_name = a.first_name and ja.last_name = a.last_name;
+
+select *
+from t_authors
+    where first_name = 'Дженнифер';
+
+
+select *
+from json_table('{"new_books":[{"authors":{"first_name":"Дженнифер","last_name":"Линкольн"},"publisher":["Манн","Иванов и Фербер"],"genre":["Анотомия и физиология","Акушерство и гинекология"],"book":"Спроси гинеколога. Все что вы хотели знать о месячных, сексе, предохранении и беременности","price":null}]}',
+    '$.mew_books[*].publisher' columns(
+        publisher varchar2(1300) path '$'
+                    ));
+
+SELECT *
+FROM JSON_TABLE('["a","b"]', '$'
+COLUMNS (
+    nested_value_0 VARCHAR2(2) PATH '$'));
