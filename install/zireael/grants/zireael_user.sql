@@ -1,1 +1,0 @@
-grant zireael_lu to zireael_user;
